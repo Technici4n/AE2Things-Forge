@@ -1,0 +1,16 @@
+{
+  "item.ae2things.disk_drive_1k": "Unidade de DISCO ME 1k",
+  "item.ae2things.disk_drive_4k": "Unidade de DISCO ME 4k ",
+  "item.ae2things.disk_drive_16k": "Unidade de DISCO ME 16k",
+  "item.ae2things.disk_drive_64k": "Unidade de DISCO ME 64k",
+  "item.ae2things.disk_drive_256k": "Unidade de DISCO ME 256k",
+  "item.ae2things.disk_housing": "Compartimento de DISCO ME",
+  "block.ae2things.advanced_inscriber": "Inscritor Avançado",
+  "itemGroup.ae2things.item_group": "AE2Things",
+  "gui.ae2things.advanced_inscriber": "Inscritor Avançado",
+  "command.ae2things.recover_success": "%s recuperou uma Unidade de DISCO com o UUID de [%s].",
+  "command.ae2things.recover_fail": "Falha ao recuperar Unidade de DISCO: UUID [%s] não existe.",
+  "command.ae2things.getuuid_success": "UUID de determinado DISCO é: [%s]",
+  "command.ae2things.getuuid_fail_nouuid": "Erro, dado que o DISCO está vazio/nenhum uuid encontrado.",
+  "command.ae2things.getuuid_fail_notdisk": "Erro, o item fornecido não é um DISCO."
+}

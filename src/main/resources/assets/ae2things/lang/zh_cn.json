@@ -5,6 +5,7 @@
   "item.ae2things.disk_drive_64k": "64k ME 磁盘驱动器",
   "item.ae2things.disk_drive_256k": "256k ME 磁盘驱动器",
   "item.ae2things.disk_housing": "ME 磁盘外壳",
+  "text.ae2things.disk_drives": "ME 磁盘驱动器",
   "command.ae2things.recover_success": "%s 已恢复 UUID 为 [%s] 的磁盘驱动器。",
   "command.ae2things.recover_fail": "无法恢复磁盘驱动器：UUID [%s] 不存在。",
   "command.ae2things.getuuid_success": "给定磁盘的 UUID 是：[%s]",

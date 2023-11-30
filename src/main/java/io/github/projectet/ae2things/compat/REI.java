@@ -15,7 +15,7 @@ import appeng.core.AppEng;
 
 @JeiPlugin
 public class REI implements IModPlugin {
-    ResourceLocation ID = AppEng.makeId("ae2.inscriber");
+    ResourceLocation ID = AppEng.makeId("inscriber");
 
     @Override
     public ResourceLocation getPluginUid() {

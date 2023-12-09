@@ -2,6 +2,9 @@ package io.github.projectet.ae2things.item;
 
 import static io.github.projectet.ae2things.AE2Things.id;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 import io.github.projectet.ae2things.AE2Things;
 
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +28,13 @@ public class AETItems {
             () -> new DISKDrive(AEItems.CELL_COMPONENT_64K.asItem(), 64, 2.0f));
     public static final RegistryObject<Item> DISK_DRIVE_256K = AE2Things.ITEMS.register("disk_drive_256k",
             () -> new DISKDrive(AEItems.CELL_COMPONENT_256K.asItem(), 256, 2.5f));
+
+    public static final List<Supplier<Item>> DISK_DRIVES = List.of(
+            DISK_DRIVE_1K,
+            DISK_DRIVE_4K,
+            DISK_DRIVE_16K,
+            DISK_DRIVE_64K,
+            DISK_DRIVE_256K);
 
     public static final ResourceLocation MODEL_DISK_DRIVE_1K = id("model/drive/cells/disk_1k");
     public static final ResourceLocation MODEL_DISK_DRIVE_4K = id("model/drive/cells/disk_4k");

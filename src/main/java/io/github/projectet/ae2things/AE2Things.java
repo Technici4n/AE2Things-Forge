@@ -119,6 +119,15 @@ public class AE2Things {
         StorageCells.addCellHandler(DISKCellHandler.INSTANCE);
         StorageCells.addCellGuiHandler(new DISKItemCellGuiHandler());
 
+        event.enqueueWork(() -> {
+            var disksText = "text.ae2things.disk_drives";
+
+            for (var cell : AETItems.DISK_DRIVES) {
+                Upgrades.add(AEItems.FUZZY_CARD, cell.get(), 1, disksText);
+                Upgrades.add(AEItems.INVERTER_CARD, cell.get(), 1, disksText);
+            }
+        });
+
         Upgrades.add(AEItems.SPEED_CARD, ADVANCED_INSCRIBER.get(), 5);
         Upgrades.add(AEItems.SPEED_CARD, CRYSTAL_GROWTH.get(), 3);
 

@@ -3,12 +3,11 @@ package io.github.projectet.ae2things.client;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.item.DISKDrive;
 
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 public class AE2ThingsClient {
-    public static void init() {
-        var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public static void init(IEventBus eventBus) {
         eventBus.addListener(AE2ThingsClient::registerItemColors);
     }
 

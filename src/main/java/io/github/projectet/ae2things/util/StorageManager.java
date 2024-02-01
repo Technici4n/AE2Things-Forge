@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class StorageManager extends SavedData {
+    private static final Factory<StorageManager> FACTORY = new Factory<>(StorageManager::new, StorageManager::readNbt);
     private final Map<UUID, DataStorage> disks;
 
     public StorageManager() {
@@ -82,7 +83,6 @@ public class StorageManager extends SavedData {
 
     public static StorageManager getInstance(MinecraftServer server) {
         ServerLevel world = server.getLevel(ServerLevel.OVERWORLD);
-        return world.getDataStorage().computeIfAbsent(StorageManager::readNbt, StorageManager::new,
-                Constants.MANAGER_NAME);
+        return world.getDataStorage().computeIfAbsent(FACTORY, Constants.MANAGER_NAME);
     }
 }

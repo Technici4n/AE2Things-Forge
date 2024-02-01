@@ -8,17 +8,14 @@ import io.github.projectet.ae2things.storage.DISKCellHandler;
 import io.github.projectet.ae2things.util.StorageManager;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.api.ids.AECreativeTabIds;
 import appeng.api.storage.StorageCells;
@@ -32,15 +29,13 @@ public class AE2Things {
 
     public static StorageManager STORAGE_INSTANCE = new StorageManager();
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
 
-    public AE2Things() {
-        var modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public AE2Things(IEventBus modEventBus, Dist dist) {
         ITEMS.register(modEventBus);
 
         AETItems.init();
@@ -48,10 +43,12 @@ public class AE2Things {
         modEventBus.addListener(AE2Things::commonSetup);
         modEventBus.addListener(AE2Things::addContentsToCreativeTab);
 
-        MinecraftForge.EVENT_BUS.addListener(Command::commandRegister);
-        MinecraftForge.EVENT_BUS.addListener(AE2Things::worldTick);
+        NeoForge.EVENT_BUS.addListener(Command::commandRegister);
+        NeoForge.EVENT_BUS.addListener(AE2Things::worldTick);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> AE2ThingsClient::init);
+        if (dist.isClient()) {
+            AE2ThingsClient.init(modEventBus);
+        }
     }
 
     public static void commonSetup(FMLCommonSetupEvent event) {
@@ -78,7 +75,7 @@ public class AE2Things {
         event.accept(AETItems.DISK_HOUSING);
 
         for (var cell : AETItems.DISK_DRIVES) {
-            event.accept(cell);
+            event.accept(cell.get());
         }
     }
 

@@ -6,7 +6,7 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[40,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[2,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="MIT"
@@ -38,11 +38,11 @@ Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.ae2things]] #optional
     # the modid of the dependency
-    modId="forge" #mandatory
+    modId="neoforge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
+    type="required"
     # The version range of the dependency
-    versionRange="[43.1.24,)" #mandatory
+    versionRange="[20.4.130-beta,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -50,13 +50,13 @@ Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey
 # Here's another dependency
 [[dependencies.ae2things]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.20.1,)"
+    type="required"
+    versionRange="[1.20.4,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ae2things]]
     modId="ae2"
-    mandatory=true
-    versionRange = "[15.0.0, 16.0.0)"
+    type="required"
+    versionRange = "[17.0.0, 18.0.0)"
     ordering="AFTER"
     side="BOTH"

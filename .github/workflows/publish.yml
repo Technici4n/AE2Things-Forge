@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 17
       - name: Build
-        run: ./gradlew downloadAssets runData build
+        run: ./gradlew build
         env:
           AE2THINGS_VERSION: ${{ github.event.release.tag_name }}
       - name: Upload Release Artifact

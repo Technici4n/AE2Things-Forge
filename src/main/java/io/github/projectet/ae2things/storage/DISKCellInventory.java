@@ -39,6 +39,8 @@ public class DISKCellInventory implements StorageCell {
 
     private final IDISKCellItem cellType;
     public static final String ITEM_COUNT_TAG = "ic";
+
+    public static final String ITEM_BYTES_TAG = "ib";
     public static final String STACK_KEYS = "keys";
     public static final String STACK_AMOUNTS = "amts";
 
@@ -48,6 +50,7 @@ public class DISKCellInventory implements StorageCell {
     private IncludeExclude partitionListMode;
     private int storedItems;
     private long storedItemCount;
+    private long storedItemBytes;
     private Object2LongMap<AEKey> storedAmounts;
     private final ItemStack i;
     private boolean isPersisted = true;
@@ -91,9 +94,11 @@ public class DISKCellInventory implements StorageCell {
         if (hasDiskUUID()) {
             this.storedItems = getDiskStorage().stackAmounts.length;
             this.storedItemCount = getDiskStorage().itemCount;
+            this.storedItemBytes = getDiskStorage().itemByte;
         } else {
             this.storedItems = 0;
             this.storedItemCount = 0;
+            this.storedItemBytes = 0;
             getCellItems();
         }
     }
@@ -159,12 +164,14 @@ public class DISKCellInventory implements StorageCell {
                 getStorageInstance().removeDisk(getDiskUUID());
                 i.getTag().remove(Constants.DISKUUID);
                 i.getTag().remove(DISKCellInventory.ITEM_COUNT_TAG);
+                i.getTag().remove(DISKCellInventory.ITEM_BYTES_TAG);
                 initData();
             }
             return;
         }
 
         long itemCount = 0;
+        long itemByte = 0;
 
         // add new pretty stuff...
         var amounts = new LongArrayList(storedAmounts.size());
@@ -177,6 +184,7 @@ public class DISKCellInventory implements StorageCell {
                 itemCount += amount;
                 keys.add(entry.getKey().toTagGeneric());
                 amounts.add(amount);
+                itemByte += amount / entry.getKey().getAmountPerUnit();
             }
         }
 
@@ -189,7 +197,9 @@ public class DISKCellInventory implements StorageCell {
         this.storedItems = (short) this.storedAmounts.size();
 
         this.storedItemCount = itemCount;
+        this.storedItemBytes = itemByte;
         i.getOrCreateTag().putLong(DISKCellInventory.ITEM_COUNT_TAG, itemCount);
+        i.getOrCreateTag().putLong(DISKCellInventory.ITEM_BYTES_TAG, itemByte);
 
         this.isPersisted = true;
     }
@@ -307,8 +317,11 @@ public class DISKCellInventory implements StorageCell {
         // recalculate values
         this.storedItems = this.storedAmounts.size();
         this.storedItemCount = 0;
-        for (var storedAmount : this.storedAmounts.values()) {
-            this.storedItemCount += storedAmount;
+        this.storedItemBytes = 0;
+        for (var entry : this.storedAmounts.object2LongEntrySet()) {
+            var entryValue = entry.getLongValue();
+            this.storedItemCount += entryValue;
+            this.storedItemBytes += entryValue / entry.getKey().getAmountPerUnit();
         }
 
         this.isPersisted = false;
@@ -404,7 +417,7 @@ public class DISKCellInventory implements StorageCell {
     }
 
     public long getFreeBytes() {
-        return this.getTotalBytes() - this.getStoredItemCount();
+        return this.getTotalBytes() - this.getStoredItemBytes();
     }
 
     public long getNbtItemCount() {
@@ -414,8 +427,19 @@ public class DISKCellInventory implements StorageCell {
         return 0;
     }
 
+    public long getNbtItemByte() {
+        if (hasDiskUUID()) {
+            return i.getTag().getLong(DISKCellInventory.ITEM_BYTES_TAG);
+        }
+        return 0;
+    }
+
     public long getStoredItemCount() {
         return this.storedItemCount;
+    }
+
+    public long getStoredItemBytes() {
+        return this.storedItemBytes;
     }
 
     public long getStoredItemTypes() {

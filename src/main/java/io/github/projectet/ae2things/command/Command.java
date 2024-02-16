@@ -69,6 +69,7 @@ public class Command {
 
             nbt.putUUID(Constants.DISKUUID, uuid);
             nbt.putLong(DISKCellInventory.ITEM_COUNT_TAG, AE2Things.STORAGE_INSTANCE.getOrCreateDisk(uuid).itemCount);
+            nbt.putLong(DISKCellInventory.ITEM_BYTES_TAG, AE2Things.STORAGE_INSTANCE.getOrCreateDisk(uuid).itemByte);
             stack.setTag(nbt);
 
             player.addItem(stack);

@@ -39,6 +39,7 @@ public abstract class CursedInternalSlotMixin {
             UUID id = UUID.randomUUID();
             newStack.getOrCreateTag().putUUID(Constants.DISKUUID, id);
             newStack.getOrCreateTag().putLong(DISKCellInventory.ITEM_COUNT_TAG, storage.itemCount);
+            newStack.getOrCreateTag().putLong(DISKCellInventory.ITEM_BYTES_TAG, storage.itemByte);
             AE2Things.STORAGE_INSTANCE.updateDisk(id, storage);
 
             newStack.setCount(newStack.getMaxStackSize());

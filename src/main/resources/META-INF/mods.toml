@@ -57,6 +57,6 @@ Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey
 [[dependencies.ae2things]]
     modId="ae2"
     type="required"
-    versionRange = "[17.0.0, 18.0.0)"
+    versionRange = "[17.9.0-beta, 18.0.0)"
     ordering="AFTER"
     side="BOTH"

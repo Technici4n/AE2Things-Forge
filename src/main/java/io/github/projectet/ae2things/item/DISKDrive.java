@@ -3,6 +3,7 @@ package io.github.projectet.ae2things.item;
 import static appeng.api.storage.StorageCells.getCellInventory;
 
 import java.util.List;
+import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +69,7 @@ public class DISKDrive extends Item implements IDISKCellItem, AEToolItem {
 
     @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
-        return CellConfig.create(getKeyType().filter(), is);
+        return CellConfig.create(Set.of(getKeyType()), is);
     }
 
     @Override

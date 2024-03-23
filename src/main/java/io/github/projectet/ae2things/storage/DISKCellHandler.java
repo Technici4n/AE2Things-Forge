@@ -37,7 +37,7 @@ public class DISKCellHandler implements ICellHandler {
         if (handler.hasDiskUUID()) {
             lines.add(Component.literal("Disk UUID: ").withStyle(ChatFormatting.GRAY)
                     .append(Component.literal(handler.getDiskUUID().toString()).withStyle(ChatFormatting.AQUA)));
-            lines.add(Tooltips.bytesUsed(handler.getNbtItemCount(), handler.getTotalBytes()));
+            lines.add(Tooltips.bytesUsed(handler.getNbtItemByte(), handler.getTotalBytes()));
         }
 
         if (handler.isPreformatted()) {

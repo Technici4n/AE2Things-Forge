@@ -1,28 +1,23 @@
 package io.github.projectet.ae2things.command;
 
-import java.util.UUID;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-
 import io.github.projectet.ae2things.AE2Things;
 import io.github.projectet.ae2things.item.AETItems;
-import io.github.projectet.ae2things.storage.DISKCellInventory;
 import io.github.projectet.ae2things.storage.IDISKCellItem;
-import io.github.projectet.ae2things.util.Constants;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.UuidArgument;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+
+import java.util.UUID;
 
 public class Command {
 
@@ -52,10 +47,10 @@ public class Command {
     private static int help(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(() -> Component.literal("Available Argument(s): "), false);
         context.getSource().sendSuccess(() -> Component.literal(
-                "/ae2things recover <UUID> - Spawns a drive with the given UUID, if it doesn't exist, does not spawn any item."),
+                        "/ae2things recover <UUID> - Spawns a drive with the given UUID, if it doesn't exist, does not spawn any item."),
                 false);
         context.getSource().sendSuccess(() -> Component.literal(
-                "/ae2things getuuid - Gets the UUID of the drive in the player's hand if it has a UUID. Returns the DISKS uuid."),
+                        "/ae2things getuuid - Gets the UUID of the drive in the player's hand if it has a UUID. Returns the DISKS uuid."),
                 false);
         return 0;
     }
@@ -65,11 +60,9 @@ public class Command {
 
         if (AE2Things.STORAGE_INSTANCE.hasUUID(uuid)) {
             ItemStack stack = new ItemStack(AETItems.DISK_DRIVE_256K.get());
-            CompoundTag nbt = new CompoundTag();
 
-            nbt.putUUID(Constants.DISKUUID, uuid);
-            nbt.putLong(DISKCellInventory.ITEM_COUNT_TAG, AE2Things.STORAGE_INSTANCE.getOrCreateDisk(uuid).itemCount);
-            stack.setTag(nbt);
+            stack.set(AE2Things.DATA_DISK_ID, uuid);
+            stack.set(AE2Things.DATA_DISK_ITEM_COUNT, AE2Things.STORAGE_INSTANCE.getOrCreateDisk(uuid).itemCount);
 
             player.addItem(stack);
 
@@ -87,8 +80,9 @@ public class Command {
         Player player = context.getSource().getPlayerOrException();
         ItemStack mainStack = player.getMainHandItem();
         if (mainStack.getItem() instanceof IDISKCellItem) {
-            if (mainStack.hasTag() && mainStack.getTag().contains(Constants.DISKUUID)) {
-                Component text = copyToClipboard(mainStack.getTag().getUUID(Constants.DISKUUID).toString());
+            var diskId = mainStack.get(AE2Things.DATA_DISK_ID);
+            if (diskId != null) {
+                Component text = copyToClipboard(diskId.toString());
                 context.getSource().sendSuccess(() -> Component.translatable("command.ae2things.getuuid_success", text),
                         false);
                 return 0;

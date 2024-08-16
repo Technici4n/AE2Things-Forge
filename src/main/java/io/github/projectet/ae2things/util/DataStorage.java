@@ -8,6 +8,10 @@ import net.minecraft.nbt.Tag;
 
 public class DataStorage {
 
+    private static final String STACK_KEYS = "keys";
+    private static final String STACK_AMOUNTS = "amts";
+    private static final String ITEM_COUNT_TAG = "item_count";
+
     public static final DataStorage EMPTY = new DataStorage();
 
     public ListTag stackKeys;
@@ -28,20 +32,18 @@ public class DataStorage {
 
     public CompoundTag toNbt() {
         CompoundTag nbt = new CompoundTag();
-        nbt.put(DISKCellInventory.STACK_KEYS, stackKeys);
-        nbt.putLongArray(DISKCellInventory.STACK_AMOUNTS, stackAmounts);
+        nbt.put(STACK_KEYS, stackKeys);
+        nbt.putLongArray(STACK_AMOUNTS, stackAmounts);
         if (itemCount != 0)
-            nbt.putLong(DISKCellInventory.ITEM_COUNT_TAG, itemCount);
+            nbt.putLong(ITEM_COUNT_TAG, itemCount);
 
         return nbt;
     }
 
     public static DataStorage fromNbt(CompoundTag nbt) {
-        long itemCount = 0;
-        ListTag stackKeys = nbt.getList(DISKCellInventory.STACK_KEYS, Tag.TAG_COMPOUND);
-        long[] stackAmounts = nbt.getLongArray(DISKCellInventory.STACK_AMOUNTS);
-        if (nbt.contains(DISKCellInventory.ITEM_COUNT_TAG))
-            itemCount = nbt.getLong(DISKCellInventory.ITEM_COUNT_TAG);
+        ListTag stackKeys = nbt.getList(STACK_KEYS, Tag.TAG_COMPOUND);
+        long[] stackAmounts = nbt.getLongArray(STACK_AMOUNTS);
+        long itemCount = nbt.getLong(ITEM_COUNT_TAG);
 
         return new DataStorage(stackKeys, stackAmounts, itemCount);
     }

@@ -5,6 +5,7 @@ import static appeng.api.storage.StorageCells.getCellInventory;
 import java.util.List;
 import java.util.Set;
 
+import io.github.projectet.ae2things.AE2Things;
 import org.jetbrains.annotations.Nullable;
 
 import io.github.projectet.ae2things.storage.DISKCellHandler;
@@ -74,20 +75,12 @@ public class DISKDrive extends Item implements IDISKCellItem, AEToolItem {
 
     @Override
     public FuzzyMode getFuzzyMode(final ItemStack is) {
-        final String fz = is.getOrCreateTag().getString("FuzzyMode");
-        if (fz.isEmpty()) {
-            return FuzzyMode.IGNORE_ALL;
-        }
-        try {
-            return FuzzyMode.valueOf(fz);
-        } catch (final Throwable t) {
-            return FuzzyMode.IGNORE_ALL;
-        }
+        return is.getOrDefault(AE2Things.DATA_FUZZY_MODE, FuzzyMode.IGNORE_ALL);
     }
 
     @Override
     public void setFuzzyMode(final ItemStack is, final FuzzyMode fzMode) {
-        is.getOrCreateTag().putString("FuzzyMode", fzMode.name());
+        is.set(AE2Things.DATA_FUZZY_MODE, fzMode);
     }
 
     @Override
@@ -143,7 +136,7 @@ public class DISKDrive extends Item implements IDISKCellItem, AEToolItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
         tooltip.add(Component.literal("Deep Item Storage disK - Storage for dummies")
                 .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
         addCellInformationToTooltip(stack, tooltip);

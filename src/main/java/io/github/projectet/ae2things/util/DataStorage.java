@@ -1,7 +1,5 @@
 package io.github.projectet.ae2things.util;
 
-import io.github.projectet.ae2things.storage.DISKCellInventory;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

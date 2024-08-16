@@ -1,8 +1,11 @@
 package io.github.projectet.ae2things.util;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +18,8 @@ public class StorageManager extends SavedData {
     private static final Factory<StorageManager> FACTORY = new Factory<>(StorageManager::new, StorageManager::readNbt);
     private static final String DISKUUID = "disk_id";
     private final Map<UUID, DataStorage> disks;
+    @Nullable
+    private WeakReference<HolderLookup.Provider> registries;
 
     public StorageManager() {
         disks = new HashMap<>();
@@ -85,6 +90,22 @@ public class StorageManager extends SavedData {
 
     public static StorageManager getInstance(MinecraftServer server) {
         ServerLevel world = server.getLevel(ServerLevel.OVERWORLD);
-        return world.getDataStorage().computeIfAbsent(FACTORY, Constants.MANAGER_NAME);
+        var manager = world.getDataStorage().computeIfAbsent(FACTORY, Constants.MANAGER_NAME);
+        manager.registries = new WeakReference<>(server.registryAccess());
+        return manager;
+    }
+
+    public HolderLookup.Provider getRegistries() {
+        var r = this.registries;
+        if (r == null) {
+            throw new IllegalStateException("StorageManager was not initialized properly.");
+        }
+
+        var registries = r.get();
+        if (registries == null) {
+            throw new IllegalStateException("Using a StorageManager whose server was already closed");
+        }
+
+        return registries;
     }
 }

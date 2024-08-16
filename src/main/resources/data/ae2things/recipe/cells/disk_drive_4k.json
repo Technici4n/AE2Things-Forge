@@ -3,22 +3,22 @@
   "pattern": ["aba", "bcb", "ded"],
   "key": {
     "a": {
-      "item": "ae2:quartz_glass"
+      "id": "ae2:quartz_glass"
     },
     "b": {
       "tag": "forge:dusts/redstone"
     },
     "c": {
-      "item": "ae2:cell_component_4k"
+      "id": "ae2:cell_component_4k"
     },
     "d": {
-      "item": "minecraft:netherite_ingot"
+      "id": "minecraft:netherite_ingot"
     },
     "e": {
-      "item": "minecraft:amethyst_shard"
+      "id": "minecraft:amethyst_shard"
     }
   },
   "result": {
-    "item": "ae2things:disk_drive_4k"
+    "id": "ae2things:disk_drive_4k"
   }
 }

@@ -1,13 +1,17 @@
 package io.github.projectet.ae2things.client;
 
+import io.github.projectet.ae2things.AE2Things;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.item.DISKDrive;
 
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
+@Mod(value = AE2Things.MOD_ID, dist = Dist.CLIENT)
 public class AE2ThingsClient {
-    public static void init(IEventBus eventBus) {
+    public AE2ThingsClient(IEventBus eventBus) {
         eventBus.addListener(AE2ThingsClient::registerItemColors);
     }
 

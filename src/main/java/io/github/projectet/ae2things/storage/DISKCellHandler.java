@@ -43,7 +43,7 @@ public class DISKCellHandler implements ICellHandler {
         if (handler.isPreformatted()) {
             var list = (handler.getPartitionListMode() == IncludeExclude.WHITELIST ? GuiText.Included
                     : GuiText.Excluded)
-                            .text();
+                    .text();
 
             if (handler.isFuzzy()) {
                 lines.add(GuiText.Partitioned.withSuffix(" - ").append(list).append(" ").append(GuiText.Fuzzy.text()));

@@ -1,11 +1,15 @@
 package io.github.projectet.ae2things.command;
 
+import java.util.UUID;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+
 import io.github.projectet.ae2things.AE2Things;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.storage.IDISKCellItem;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -16,8 +20,6 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-
-import java.util.UUID;
 
 public class Command {
 
@@ -47,10 +49,10 @@ public class Command {
     private static int help(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(() -> Component.literal("Available Argument(s): "), false);
         context.getSource().sendSuccess(() -> Component.literal(
-                        "/ae2things recover <UUID> - Spawns a drive with the given UUID, if it doesn't exist, does not spawn any item."),
+                "/ae2things recover <UUID> - Spawns a drive with the given UUID, if it doesn't exist, does not spawn any item."),
                 false);
         context.getSource().sendSuccess(() -> Component.literal(
-                        "/ae2things getuuid - Gets the UUID of the drive in the player's hand if it has a UUID. Returns the DISKS uuid."),
+                "/ae2things getuuid - Gets the UUID of the drive in the player's hand if it has a UUID. Returns the DISKS uuid."),
                 false);
         return 0;
     }

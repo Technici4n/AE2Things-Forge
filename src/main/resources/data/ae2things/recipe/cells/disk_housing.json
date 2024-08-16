@@ -3,19 +3,19 @@
   "pattern": ["aba", "b b", "cdc"],
   "key": {
     "a": {
-      "item": "ae2:quartz_glass"
+      "id": "ae2:quartz_glass"
     },
     "b": {
       "tag": "forge:dusts/redstone"
     },
     "c": {
-      "item": "minecraft:netherite_ingot"
+      "id": "minecraft:netherite_ingot"
     },
     "d": {
-      "item": "minecraft:amethyst_shard"
+      "id": "minecraft:amethyst_shard"
     }
   },
   "result": {
-    "item": "ae2things:disk_housing"
+    "id": "ae2things:disk_housing"
   }
 }

@@ -16,7 +16,7 @@ license="MIT"
 [[mods]] #mandatory
 # The modid of the mod
 modId="ae2things" #mandatory
-version="${version}" #mandatory
+version="${file.jarVersion}" #mandatory
  # A display name for the mod
 displayName="AE2 Things" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
@@ -42,7 +42,7 @@ Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey
     # Does this dependency have to exist - if not, ordering below must be specified
     type="required"
     # The version range of the dependency
-    versionRange="[20.4.130-beta,)" #mandatory
+    versionRange="[21.1.0,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -51,12 +51,12 @@ Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey
 [[dependencies.ae2things]]
     modId="minecraft"
     type="required"
-    versionRange="[1.20.4,)"
+    versionRange="[1.21.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.ae2things]]
     modId="ae2"
     type="required"
-    versionRange = "[17.9.0-beta, 18.0.0)"
+    versionRange = "[19.0.0-beta, 20.0.0)"
     ordering="AFTER"
     side="BOTH"

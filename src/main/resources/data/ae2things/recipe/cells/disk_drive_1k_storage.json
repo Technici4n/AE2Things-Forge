@@ -1,14 +1,16 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
-      "id": "ae2things:disk_housing"
+      "item": "ae2things:disk_housing"
     },
     {
-      "id": "ae2:cell_component_1k"
+      "item": "ae2:cell_component_1k"
     }
   ],
   "result": {
+    "count": 1,
     "id": "ae2things:disk_drive_1k"
   }
 }

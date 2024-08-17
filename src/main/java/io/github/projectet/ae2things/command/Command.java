@@ -60,11 +60,13 @@ public class Command {
     private static int spawnDrive(CommandContext<CommandSourceStack> context, UUID uuid) throws CommandSyntaxException {
         Player player = context.getSource().getPlayerOrException();
 
-        if (AE2Things.STORAGE_INSTANCE.hasUUID(uuid)) {
+        var storageManager = AE2Things.currentStorageManager();
+
+        if (storageManager != null && storageManager.hasUUID(uuid)) {
             ItemStack stack = new ItemStack(AETItems.DISK_DRIVE_256K.get());
 
             stack.set(AE2Things.DATA_DISK_ID, uuid);
-            stack.set(AE2Things.DATA_DISK_ITEM_COUNT, AE2Things.STORAGE_INSTANCE.getOrCreateDisk(uuid).itemCount);
+            stack.set(AE2Things.DATA_DISK_ITEM_COUNT, storageManager.getOrCreateDisk(uuid).itemCount);
 
             player.addItem(stack);
 

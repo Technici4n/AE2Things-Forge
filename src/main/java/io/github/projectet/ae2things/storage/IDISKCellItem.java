@@ -80,4 +80,10 @@ public interface IDISKCellItem extends ICellWorkbenchItem {
         Preconditions.checkArgument(is.getItem() == this);
         DISKCellHandler.INSTANCE.addCellInformationToTooltip(is, lines);
     }
+
+    /**
+     * Properly clone the given drive if possible. It tries to clone the contents too but skips that if it's a client
+     * connected to a server which is just cloning disks in creative.
+     */
+    ItemStack clone(ItemStack item);
 }

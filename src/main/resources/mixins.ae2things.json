@@ -1,6 +1,5 @@
 {
   "package": "io.github.projectet.ae2things.mixin",
-  "refmap": "mixins.ae2things.refmap.json",
   "required": false,
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",

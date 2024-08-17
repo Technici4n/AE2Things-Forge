@@ -35,6 +35,10 @@ This mod adds a new type of cell the DISK: Deep Item Storage disK.
 This cell has no type limits and one item counts as one byte.
 Due to limitations with the cell format, you lose 24 bytes per kibibyte, but hey a small price to pay for no types right?
 '''
+
+[[mixins]]
+config="mixins.ae2things.json"
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.ae2things]] #optional
     # the modid of the dependency

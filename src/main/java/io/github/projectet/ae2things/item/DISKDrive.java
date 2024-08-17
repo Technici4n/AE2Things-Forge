@@ -4,12 +4,14 @@ import static appeng.api.storage.StorageCells.getCellInventory;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
 import io.github.projectet.ae2things.AE2Things;
-import io.github.projectet.ae2things.storage.DISKCellHandler;
+import io.github.projectet.ae2things.storage.DISKCellInventory;
 import io.github.projectet.ae2things.storage.IDISKCellItem;
+import io.github.projectet.ae2things.util.DataStorage;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -72,6 +74,31 @@ public class DISKDrive extends Item implements IDISKCellItem, AEToolItem {
     @Override
     public ConfigInventory getConfigInventory(ItemStack is) {
         return CellConfig.create(Set.of(getKeyType()), is);
+    }
+
+    @Override
+    public ItemStack clone(ItemStack item) {
+        var diskId = item.get(AE2Things.DATA_DISK_ID);
+        if (diskId != null) {
+            UUID id = UUID.randomUUID();
+            ItemStack newStack = item.copy();
+            newStack.set(AE2Things.DATA_DISK_ID, id);
+            newStack.setCount(newStack.getMaxStackSize());
+
+            // Clone the disk if we can (this does not work in MP)
+            var storageManager = AE2Things.currentStorageManager();
+            if (storageManager != null) {
+                DataStorage storage = storageManager.getOrCreateDisk(diskId);
+                newStack.set(AE2Things.DATA_DISK_ITEM_COUNT, storage.itemCount);
+                storageManager.updateDisk(id, storage);
+            } else {
+                newStack.remove(AE2Things.DATA_DISK_ITEM_COUNT);
+            }
+
+            return newStack;
+        } else {
+            return item.copy();
+        }
     }
 
     @Override
@@ -146,8 +173,9 @@ public class DISKDrive extends Item implements IDISKCellItem, AEToolItem {
 
     public static int getColor(ItemStack stack, int tintIndex) {
         if (tintIndex == 1) {
-            // Determine LED color
-            var cellInv = DISKCellHandler.INSTANCE.getCellInventory(stack, null);
+            // Create the inventory with an explicit null storage manager since we only need read-only data
+            // And do not want to reach into the server-side storage manager.
+            var cellInv = DISKCellInventory.createInventory(stack, null, null);
             var cellStatus = cellInv != null ? cellInv.getClientStatus() : CellState.EMPTY;
             return 0xFF000000 | cellStatus.getStateColor();
         } else {

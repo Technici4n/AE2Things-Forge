@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 
 import com.mojang.serialization.Codec;
 
+import org.jetbrains.annotations.Nullable;
+
 import io.github.projectet.ae2things.command.Command;
 import io.github.projectet.ae2things.item.AETItems;
 import io.github.projectet.ae2things.storage.DISKCellHandler;
@@ -14,13 +16,14 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import appeng.api.config.FuzzyMode;
@@ -33,8 +36,6 @@ import appeng.core.definitions.AEItems;
 public class AE2Things {
 
     public static final String MOD_ID = "ae2things";
-
-    public static StorageManager STORAGE_INSTANCE = new StorageManager();
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
 
@@ -52,6 +53,12 @@ public class AE2Things {
                 builder.persistent(FuzzyMode.CODEC).networkSynchronized(FuzzyMode.STREAM_CODEC);
             });
 
+    @Nullable
+    private static StorageManager storageManager;
+
+    @Nullable
+    private static MinecraftServer storageManagerServer;
+
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
@@ -66,7 +73,8 @@ public class AE2Things {
         modEventBus.addListener(AE2Things::addContentsToCreativeTab);
 
         NeoForge.EVENT_BUS.addListener(Command::commandRegister);
-        NeoForge.EVENT_BUS.addListener(AE2Things::worldTick);
+        NeoForge.EVENT_BUS.addListener(AE2Things::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(AE2Things::onServerStopped);
     }
 
     public static void commonSetup(FMLCommonSetupEvent event) {
@@ -96,10 +104,15 @@ public class AE2Things {
         }
     }
 
-    public static void worldTick(LevelTickEvent.Pre event) {
-        var level = event.getLevel();
-        if (level instanceof ServerLevel serverLevel) {
-            STORAGE_INSTANCE = StorageManager.getInstance(serverLevel.getServer());
+    private static void onServerStarted(ServerStartedEvent event) {
+        storageManagerServer = event.getServer();
+        storageManager = StorageManager.getInstance(event.getServer());
+    }
+
+    private static void onServerStopped(ServerStoppedEvent event) {
+        if (storageManagerServer == event.getServer()) {
+            storageManagerServer = null;
+            storageManager = null;
         }
     }
 
@@ -110,5 +123,10 @@ public class AE2Things {
         var componentType = builder.build();
         COMPONENTS.register(name, () -> componentType);
         return componentType;
+    }
+
+    @Nullable
+    public static StorageManager currentStorageManager() {
+        return storageManager;
     }
 }

@@ -2,6 +2,7 @@ package io.github.projectet.ae2things.storage;
 
 import java.util.List;
 
+import io.github.projectet.ae2things.AE2Things;
 import io.github.projectet.ae2things.item.DISKDrive;
 
 import net.minecraft.ChatFormatting;
@@ -25,11 +26,12 @@ public class DISKCellHandler implements ICellHandler {
 
     @Override
     public DISKCellInventory getCellInventory(ItemStack is, ISaveProvider container) {
-        return DISKCellInventory.createInventory(is, container);
+        return DISKCellInventory.createInventory(is, container, AE2Things.currentStorageManager());
     }
 
     public void addCellInformationToTooltip(ItemStack stack, List<Component> lines) {
-        var handler = getCellInventory(stack, null);
+        // Explicitly don't pass a storage manager since this only needs info stored on the item
+        var handler = DISKCellInventory.createInventory(stack, null, null);
 
         if (handler == null)
             return;

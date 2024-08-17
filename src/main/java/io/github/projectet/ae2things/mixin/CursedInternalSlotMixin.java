@@ -1,7 +1,5 @@
 package io.github.projectet.ae2things.mixin;
 
-import java.util.UUID;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,8 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.projectet.ae2things.AE2Things;
-import io.github.projectet.ae2things.util.DataStorage;
+import io.github.projectet.ae2things.storage.IDISKCellItem;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
@@ -31,16 +28,9 @@ public abstract class CursedInternalSlotMixin {
     public void CLONE(int slotIndex, int button, ClickType actionType, Player player, CallbackInfo ci) {
         Slot i = this.slots.get(slotIndex);
 
-        var diskId = i.getItem().get(AE2Things.DATA_DISK_ID);
-        if (diskId != null) {
-            DataStorage storage = AE2Things.STORAGE_INSTANCE.getOrCreateDisk(diskId);
-            ItemStack newStack = new ItemStack(i.getItem().getItem());
-            UUID id = UUID.randomUUID();
-            newStack.set(AE2Things.DATA_DISK_ID, id);
-            newStack.set(AE2Things.DATA_DISK_ITEM_COUNT, storage.itemCount);
-            AE2Things.STORAGE_INSTANCE.updateDisk(id, storage);
-
-            newStack.setCount(newStack.getMaxStackSize());
+        var stack = i.getItem();
+        if (stack.getItem() instanceof IDISKCellItem diskCellItem) {
+            var newStack = diskCellItem.clone(stack);
             this.setCarried(newStack);
             ci.cancel();
         }

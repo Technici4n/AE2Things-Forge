@@ -42,6 +42,12 @@ public class DISKCellInventory implements StorageCell {
 
     private final ISaveProvider container;
     private final AEKeyType keyType;
+    /**
+     * Without a storage manager, this inventory is read-only and shows only information retrievable from the stack
+     * itself.
+     */
+    @Nullable
+    private final StorageManager storageManager;
     private IPartitionList partitionList;
     private IncludeExclude partitionListMode;
     private int storedItems;
@@ -50,11 +56,15 @@ public class DISKCellInventory implements StorageCell {
     private final ItemStack i;
     private boolean isPersisted = true;
 
-    public DISKCellInventory(IDISKCellItem cellType, ItemStack stack, ISaveProvider saveProvider) {
+    public DISKCellInventory(IDISKCellItem cellType,
+            ItemStack stack,
+            ISaveProvider saveProvider,
+            @Nullable StorageManager storageManager) {
         this.cellType = cellType;
         this.i = stack;
         this.container = saveProvider;
         this.keyType = cellType.getKeyType();
+        this.storageManager = storageManager;
         this.storedAmounts = null;
         initData();
 
@@ -79,10 +89,11 @@ public class DISKCellInventory implements StorageCell {
     }
 
     private DataStorage getDiskStorage() {
-        if (getDiskUUID() != null)
-            return getStorageInstance().getOrCreateDisk(getDiskUUID());
-        else
+        if (getDiskUUID() != null && storageManager != null) {
+            return storageManager.getOrCreateDisk(getDiskUUID());
+        } else {
             return DataStorage.EMPTY;
+        }
     }
 
     private void initData() {
@@ -148,14 +159,13 @@ public class DISKCellInventory implements StorageCell {
 
     @Override
     public void persist() {
-        if (this.isPersisted) {
+        if (this.isPersisted || storageManager == null) {
             return;
         }
 
-        var storageInstance = getStorageInstance();
         if (storedItemCount == 0) {
             if (hasDiskUUID()) {
-                storageInstance.removeDisk(getDiskUUID());
+                storageManager.removeDisk(getDiskUUID());
                 i.remove(AE2Things.DATA_DISK_ID);
                 i.remove(AE2Things.DATA_DISK_ITEM_COUNT);
                 initData();
@@ -174,15 +184,15 @@ public class DISKCellInventory implements StorageCell {
 
             if (amount > 0) {
                 itemCount += amount;
-                keys.add(entry.getKey().toTagGeneric(storageInstance.getRegistries()));
+                keys.add(entry.getKey().toTagGeneric(storageManager.getRegistries()));
                 amounts.add(amount);
             }
         }
 
         if (keys.isEmpty()) {
-            storageInstance.updateDisk(getDiskUUID(), new DataStorage());
+            storageManager.updateDisk(getDiskUUID(), new DataStorage());
         } else {
-            storageInstance.modifyDisk(getDiskUUID(), keys, amounts.toArray(new long[0]), itemCount);
+            storageManager.modifyDisk(getDiskUUID(), keys, amounts.toArray(new long[0]), itemCount);
         }
 
         this.storedItems = (short) this.storedAmounts.size();
@@ -198,7 +208,9 @@ public class DISKCellInventory implements StorageCell {
         return null;
     }
 
-    public static DISKCellInventory createInventory(ItemStack stack, ISaveProvider saveProvider) {
+    public static DISKCellInventory createInventory(ItemStack stack,
+            ISaveProvider saveProvider,
+            @Nullable StorageManager storageManager) {
         Objects.requireNonNull(stack, "Cannot create cell inventory for null itemstack");
 
         if (!(stack.getItem() instanceof IDISKCellItem cellType)) {
@@ -211,7 +223,7 @@ public class DISKCellInventory implements StorageCell {
         }
 
         // The cell type's channel matches, so this cast is safe
-        return new DISKCellInventory(cellType, stack, saveProvider);
+        return new DISKCellInventory(cellType, stack, saveProvider, storageManager);
     }
 
     public boolean hasDiskUUID() {
@@ -267,16 +279,20 @@ public class DISKCellInventory implements StorageCell {
     }
 
     private void loadCellItems() {
-        boolean corruptedTag = false;
+        if (this.storageManager == null) {
+            return;
+        }
 
-        var amounts = getDiskStorage().stackAmounts;
-        var tags = getDiskStorage().stackKeys;
+        var diskStorage = getDiskStorage();
+        var amounts = diskStorage.stackAmounts;
+        var tags = diskStorage.stackKeys;
         if (amounts.length != tags.size()) {
             AELog.warn("Loading storage cell with mismatched amounts/tags: %d != %d",
                     amounts.length, tags.size());
         }
 
-        var registries = getStorageInstance().getRegistries();
+        boolean corruptedTag = false;
+        var registries = storageManager.getRegistries();
 
         for (int i = 0; i < amounts.length; i++) {
             var amount = amounts[i];
@@ -292,10 +308,6 @@ public class DISKCellInventory implements StorageCell {
         if (corruptedTag) {
             this.saveChanges();
         }
-    }
-
-    private StorageManager getStorageInstance() {
-        return AE2Things.STORAGE_INSTANCE;
     }
 
     protected void saveChanges() {
@@ -340,15 +352,15 @@ public class DISKCellInventory implements StorageCell {
         // any NBT data for empty cells instead of relying on an empty IAEStackList
         if (what instanceof AEItemKey itemKey && this.isStorageCell(itemKey)) {
             // TODO: make it work for any cell, and not just BasicCellInventory!
-            var meInventory = createInventory(itemKey.toStack(), null);
+            var meInventory = createInventory(itemKey.toStack(), null, storageManager);
             if (!isCellEmpty(meInventory)) {
                 return 0;
             }
         }
 
-        if (!hasDiskUUID()) {
+        if (storageManager != null && !hasDiskUUID()) {
             i.set(AE2Things.DATA_DISK_ID, UUID.randomUUID());
-            getStorageInstance().getOrCreateDisk(getDiskUUID());
+            storageManager.getOrCreateDisk(getDiskUUID());
             loadCellItems();
         }
 

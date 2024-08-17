@@ -1,20 +1,25 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": ["aba", "b b", "cdc"],
+  "category": "misc",
   "key": {
     "a": {
-      "id": "ae2:quartz_glass"
+      "item": "ae2:quartz_glass"
     },
     "b": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     },
     "c": {
-      "id": "minecraft:netherite_ingot"
+      "item": "minecraft:netherite_ingot"
     },
     "d": {
-      "id": "minecraft:amethyst_shard"
+      "item": "minecraft:amethyst_shard"
     }
   },
+  "pattern": [
+    "aba",
+    "b b",
+    "cdc"
+  ],
   "result": {
     "id": "ae2things:disk_housing"
   }

@@ -1,0 +1,14 @@
+{
+  "item.ae2things.disk_drive_1k": "1k MEディスクドライブ",
+  "item.ae2things.disk_drive_4k": "4k MEディスクドライブ",
+  "item.ae2things.disk_drive_16k": "16k MEディスクドライブ",
+  "item.ae2things.disk_drive_64k": "64k MEディスクドライブ",
+  "item.ae2things.disk_drive_256k": "256k MEディスクドライブ",
+  "item.ae2things.disk_housing": "MEディスク筐体",
+  "text.ae2things.disk_drives": "ME DISK Drives",
+  "command.ae2things.recover_success": "%sはUUIDが[%s]のディスクドライブをリカバリしました。",
+  "command.ae2things.recover_fail": "ディスクドライブのリカバリに失敗しました:UUID[%s]が存在しません。",
+  "command.ae2things.getuuid_success": "指定されたディスクのUUIDは次のとおりです:[%s]",
+  "command.ae2things.getuuid_fail_nouuid": "エラー：ディスクが空であるか、UUIDが見つかりません。",
+  "command.ae2things.getuuid_fail_notdisk": "エラー：指定された項目はディスクではありません。"
+}

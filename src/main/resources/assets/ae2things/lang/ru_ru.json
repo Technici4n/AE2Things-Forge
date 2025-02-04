@@ -1,13 +1,14 @@
 {
-  "item.ae2things.disk_drive_1k": "Дисковый накопитель ME 1К",
-  "item.ae2things.disk_drive_4k": "Дисковый накопитель ME 4К",
-  "item.ae2things.disk_drive_16k": "Дисковый накопитель ME 16К",
-  "item.ae2things.disk_drive_64k": "Дисковый накопитель ME 64К",
-  "item.ae2things.disk_drive_256k": "Дисковый накопитель ME 256К",
-  "item.ae2things.disk_housing": "Корпус диска ME",
-  "command.ae2things.recover_success": "%s восстановил Дисковый накопитель с UUID [%s].",
-  "command.ae2things.recover_fail": "Не удалось восстановить Дисковый накопитель: (универсальный уникальный идентификатор) UUID [%s] не существует.",
-  "command.ae2things.getuuid_success": "Диск получил UUID: [%s]",
-  "command.ae2things.getuuid_fail_nouuid": "Ошибка, полученный Диск пуст/не найден uuid.",
-  "command.ae2things.getuuid_fail_notdisk": "Ошибка, полученный предмет не Диск."
+  "item.ae2things.disk_drive_1k": "1К МЭ ячейка глубокого хранения",
+  "item.ae2things.disk_drive_4k": "4К МЭ ячейка глубокого хранения",
+  "item.ae2things.disk_drive_16k": "16К МЭ ячейка глубокого хранения",
+  "item.ae2things.disk_drive_64k": "64К МЭ ячейка глубокого хранения",
+  "item.ae2things.disk_drive_256k": "256К МЭ ячейка глубокого хранения",
+  "item.ae2things.disk_housing": "ME корпус для ячейки глубокого хранения",
+  "text.ae2things.disk_drives": "ME ячейки глубокого хранения",
+  "command.ae2things.recover_success": "%s восстановил ячейки глубокого хранения с UUID [%s].",
+  "command.ae2things.recover_fail": "Не удалось восстановить ячейки глубокого хранения: (универсальный уникальный идентификатор) UUID [%s] не существует.",
+  "command.ae2things.getuuid_success": "Ячейка получила UUID: [%s]",
+  "command.ae2things.getuuid_fail_nouuid": "Ошибка, полученная ячейка пуста/не найден uuid.",
+  "command.ae2things.getuuid_fail_notdisk": "Ошибка, полученный предмет не ячейка."
 }
